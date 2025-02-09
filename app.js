@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 
 //importing security middlewares
+const dotenv = require('dotenv')
 const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
@@ -19,6 +20,7 @@ const limiter = rateLimit({
 
 });
 
+
 app.use(hpp());
 app.use(helmet());
 app.use(xss());
@@ -33,6 +35,9 @@ app.use(cookieParser())
 //implementation of routes
 app.use("/api/v1", router);
 
+//env file
+
+dotenv.config()
 
 //implementation if undefined route
 app.use("*", (req, res) => {

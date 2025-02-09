@@ -9,5 +9,5 @@ connectDB()
 
 //server
 app.listen(5050,()=>{
-    console.log("App is running 5050");
+    console.log("App is running 🔥5050🔥");
 })
