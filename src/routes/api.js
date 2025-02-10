@@ -2,6 +2,8 @@ const express = require("express");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/User");
+const { createNav } = require("../controller/navController");
+const { getUser, createUser } = require("../controller/userController");
 
 const router = express.Router();
 
@@ -78,9 +80,8 @@ router.post("/login", async (req, res) => {
   
 });
 
-router.get('/', async (req, res) => {
-  res.send("Welcome to HY STAFFING")
-});
+router.get('/user', getUser);
+router.post('/user', createUser);
 
 
 module.exports = router;

@@ -19,4 +19,4 @@ const countSchema = new mongoose.Schema(
 );
 
 const CountModel = mongoose.model("Count", countSchema);
-module.exports = CountModel;
+module.exports =  m;
