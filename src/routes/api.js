@@ -33,7 +33,7 @@ router.post("/signup", async (req, res) => {
     });
 
     await newUser.save();
-
+ 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -44,47 +44,43 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.find({ email: req.body.email });
-    if (user && user.length > 0) {
-      const matchPassword = await bcrypt.compare(
-        req.body.password,
-        user[0].password
-      );
-      if (matchPassword) {
-        // Generate JWT token
-        const token = jwt.sign(
-          {
-            id: newUser._id,
+    // Find user by email
+    const user = await User.findOne({ email: req.body.email });
 
-            email: newUser.email,
-          },
-          process.env.JWT_SECRET,
-          { expiresIn: "1h" }
-        );
-
-        res.status(200).json({
-          "Access Token": token,
-          Message: "LogIn successfull",
-        });
-      } else {
-        res.status(401).json({
-          Error: "Authentication Error",
-        });
-      }
-    } else {
-      res.status(401).json({
-        Error: "Authentication Error",
-      });
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
     }
-  } catch {
-    res.status(401).json({
-      Error: "Authentication Error",
+
+    // Compare passwords
+    const matchPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!matchPassword) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({
+      accessToken: token,
+      message: "Login successful",
     });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
+  
 });
 
-router.post('/navbar',async(req,res)=>{
-      
-})
+router.get('/', async (req, res) => {
+  res.send("Welcome to HY STAFFING")
+});
+
 
 module.exports = router;

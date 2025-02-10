@@ -1,10 +1,32 @@
 const mongoose = require("mongoose");
 
-const navbarSchema = new mongoose.Schema({
-  title: { type: String, required: true }, 
-  link: { type: String, required: true },
-  isActive: { type: Boolean, default: false }, 
-});
+const navSchema = new mongoose.Schema(
+  {
+    logo: {
+      type: String,
+      required: [true, "Logo is required!"],
+      index: true,
+      trim: true,
+    },
+    links: [
+      {
+        title: {
+          type: String,
+          required: [true, "Title is required!"],
+          index: true,
+          trim: true,
+        },
+        path: {
+          type: String,
+          required: [true, "Path is required!"],
+          index: true,
+          trim: true,
+        },
+      },
+    ],
+  },
+  { timestamps: true, versionKey: false }
+);
 
-const NavbarModel = mongoose.model("Navbar", navbarSchema);
+const NavbarModel = mongoose.model("Navbar", navSchema);
 module.exports = NavbarModel;
