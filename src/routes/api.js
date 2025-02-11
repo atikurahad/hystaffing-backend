@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../schemas/User");
 const { createNav } = require("../controller/navController");
 const { getUser, createUser } = require("../controller/userController");
+const { createReview } = require("../controller/reviewController");
 
 const router = express.Router();
 
@@ -82,6 +83,6 @@ router.post("/login", async (req, res) => {
 
 router.get('/user', getUser);
 router.post('/user', createUser);
-
+router.post('/review',createReview)
 
 module.exports = router;

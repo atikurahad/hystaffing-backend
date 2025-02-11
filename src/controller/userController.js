@@ -1,5 +1,37 @@
 const User = require("../schemas/User");
 
+
+
+exports.createUser = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
+
+    // Validate input fields
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Create and save new user
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password, 
+    });
+    await newUser.save();
+
+    res.status(201).json({
+      status: "Success",
+      message: "User create successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "Failed",
+      message: error.message,
+    });
+  }
+};
+
 exports.getUser = async (req, res) => {
   try {
     const { email } = req.body;
@@ -22,36 +54,6 @@ exports.getUser = async (req, res) => {
     res.status(500).json({
       status: "Failed",
       message: e,
-    });
-  }
-};
-
-exports.createUser = async (req, res) => {
-  try {
-    const { firstName, lastName, email, password } = req.body;
-
-    // Validate input fields
-    if (!firstName || !lastName || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // Create and save new user
-    const newUser = new User({
-      firstName,
-      lastName,
-      email,
-      password, // Don't forget to hash the password before saving in a real app
-    });
-    await newUser.save();
-
-    res.status(201).json({
-      status: "Success",
-      message: "User create successfully",
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "Failed",
-      message: error.message,
     });
   }
 };
